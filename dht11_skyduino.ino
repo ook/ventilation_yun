@@ -1,3 +1,5 @@
+#include <Console.h>
+
 /** Broche "DATA" du DHT11 */
 const byte DHT11_PIN = 5;
  
@@ -11,9 +13,13 @@ enum {
 /** Fonction setup() */
 void setup() {
  
-  /* Initialisation du port série */
-  Serial.begin(115200);
-  Serial.println(F("DHT11 DEMO"));
+  /* Start Bridge and Console for Yùn comm */
+  Bridge.begin();
+  Console.begin();
+  
+  while (!Console){
+    ; //Attendre la connexion du port Console.
+  }
 }
  
 /** Fonction loop() */
@@ -27,18 +33,18 @@ void loop() {
   case DHT11_SUCCESS:
      
     /* Affichage de la température et du taux d'humidité */
-    Serial.print(F("Humidite (%): "));
-    Serial.println((int) humidity);
-    Serial.print(F("Temperature (^C): "));
-    Serial.println((int) temperature);
+    Console.print("Humidite (%): ");
+    Console.println((int) humidity);
+    Console.print("Temperature (^C): ");
+    Console.println((int) temperature);
     break;
  
   case DHT11_TIMEOUT_ERROR:
-    Serial.println(F("Temps d'attente depasse !"));
+    Console.println("Temps d'attente depasse !");
     break;
  
   case DHT11_CHECKSUM_ERROR:
-    Serial.println(F("Erreur de checksum !"));
+    Console.println("Erreur de checksum !");
     break;
   }
    
