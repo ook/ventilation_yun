@@ -1,7 +1,14 @@
 #include <Console.h>
+#include <Bridge.h>
+#include <YunServer.h>
+#include <YunClient.h>
 
 /** Broche "DATA" du DHT11 */
 const byte DHT11_PIN = 5;
+/** Trigger pin for the power relay */
+const byte RELAY_PIN = 2;
+ 
+YunServer server;
  
 /** Code d'erreur de la fonction readDHT11() */
 enum {
@@ -12,10 +19,13 @@ enum {
  
 /** Fonction setup() */
 void setup() {
- 
+  pinMode(RELAY_PIN, OUTPUT);
+  
   /* Start Bridge and Console for Yùn comm */
   Bridge.begin();
   Console.begin();
+  server.listenOnLocalhost();
+  server.begin();
   
   while (!Console){
     ; //Attendre la connexion du port Console.
@@ -24,32 +34,54 @@ void setup() {
  
 /** Fonction loop() */
 void loop() {
+  YunClient client = server.accept();
+  if (client) {
+    String request = client.readString();
+    request.trim();
+    if (request.length() > 0) {
+      if (request == "dht11") {
+        Console.print("Commande DHT11: ");
+        Console.println(request);
+        /* Variables d'usage */
+        byte temperature, humidity;
  
-  /* Variables d'usage */
-  byte temperature, humidity;
- 
-  /* Lecture de la température et de l'humidité + gestion des erreurs */
-  switch (readDHT11(DHT11_PIN, &temperature, &humidity)) {
-  case DHT11_SUCCESS:
+        /* Lecture de la température et de l'humidité + gestion des erreurs */
+        switch (readDHT11(DHT11_PIN, &temperature, &humidity)) {
+        case DHT11_SUCCESS:
      
-    /* Affichage de la température et du taux d'humidité */
-    Console.print("Humidite (%): ");
-    Console.println((int) humidity);
-    Console.print("Temperature (^C): ");
-    Console.println((int) temperature);
-    break;
+        /* Affichage de la température et du taux d'humidité */
+        Console.print(F("Humidite (%): "));
+        Console.println((int) humidity);
+        Console.print(F("Temperature (°C): "));
+        Console.println((int) temperature);
+        client.print((int)humidity);
+        client.print("|");
+        client.print((int)temperature);
+        break;
  
-  case DHT11_TIMEOUT_ERROR:
-    Console.println("Temps d'attente depasse !");
-    break;
+      case DHT11_TIMEOUT_ERROR:
+        Console.println(F("Temps d'attente depasse !"));
+        break;
  
-  case DHT11_CHECKSUM_ERROR:
-    Console.println("Erreur de checksum !");
-    break;
+      case DHT11_CHECKSUM_ERROR:
+        Console.println(F("Erreur de checksum !"));
+        break;
+      }
+      } else if (request == "relay/off") {
+        digitalWrite(RELAY_PIN, 0);
+        client.print("relay off");
+      } else if (request == "relay/on") {
+        digitalWrite(RELAY_PIN, 1);
+        client.print("relay on");
+      }
+    }
+    client.stop();
   }
+  
    
   /* Pas besoin de rafraichir l'affichage très souvent */
   delay(2000);
+  
 }
  
 /**
