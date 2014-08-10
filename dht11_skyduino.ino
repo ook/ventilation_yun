@@ -68,10 +68,10 @@ void loop() {
         break;
       }
       } else if (request == "relay/off") {
-        digitalWrite(RELAY_PIN, 0);
+        digitalWrite(RELAY_PIN, LOW);
         client.print("relay off");
       } else if (request == "relay/on") {
-        digitalWrite(RELAY_PIN, 1);
+        digitalWrite(RELAY_PIN, HIGH);
         client.print("relay on");
       }
     }
