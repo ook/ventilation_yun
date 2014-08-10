@@ -1,4 +1,4 @@
-#include <Console.h>
+//#include <Console.h>
 #include <Bridge.h>
 #include <YunServer.h>
 #include <YunClient.h>
@@ -23,13 +23,13 @@ void setup() {
   
   /* Start Bridge and Console for Yùn comm */
   Bridge.begin();
-  Console.begin();
+  //Console.begin();
   server.listenOnLocalhost();
   server.begin();
   
-  while (!Console){
+  /*while (!Console){
     ; //Attendre la connexion du port Console.
-  }
+  }*/
 }
  
 /** Fonction loop() */
@@ -40,8 +40,8 @@ void loop() {
     request.trim();
     if (request.length() > 0) {
       if (request == "dht11") {
-        Console.print("Commande DHT11: ");
-        Console.println(request);
+        //Console.print("Commande DHT11: ");
+       // Console.println(request);
         /* Variables d'usage */
         byte temperature, humidity;
  
@@ -50,21 +50,23 @@ void loop() {
         case DHT11_SUCCESS:
      
         /* Affichage de la température et du taux d'humidité */
+        /*
         Console.print(F("Humidite (%): "));
         Console.println((int) humidity);
         Console.print(F("Temperature (°C): "));
         Console.println((int) temperature);
+        */
         client.print((int)humidity);
         client.print("|");
         client.print((int)temperature);
         break;
  
       case DHT11_TIMEOUT_ERROR:
-        Console.println(F("Temps d'attente depasse !"));
+        //Console.println(F("Temps d'attente depasse !"));
         break;
  
       case DHT11_CHECKSUM_ERROR:
-        Console.println(F("Erreur de checksum !"));
+        //Console.println(F("Erreur de checksum !"));
         break;
       }
       } else if (request == "relay/off") {
