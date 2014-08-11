@@ -1,4 +1,5 @@
-ventilation_yùn
+Ventilation Yùn
+===============
 
 My little boy's room is rather wet, so I need to trigger its mechanical ventilation as soon as I can and the more automatic is the better.
 
@@ -7,8 +8,10 @@ On the other hand, my wife is not a connected geek as I am, so I need to let her
 Here's my solution:
 
 * Arduino Yùn next the ventilation system, with a relay and a DHT11 sensor.
-* The relay will be connected in a "va et vient" with the simple swith, so my wife'll be happy
+* The relay will be connected in a toggle switch with the simple swith, so my wife'll be happy
 * A REST interface will be defined to trigger the relay and get the DHT11 informations
 * One of my two main server will be allowed to consult and trigger the Yùn, with some rules (baby-boy not at home, parents not at home: if humidity > 55% and temp > 19°C, trigger the ventialtion and so on.
 
 Of course, I can change my mind on my way... 
+
+Note: DHT11 routine is from Skyduino's blog: http://skyduino.wordpress.com/2013/04/27/tuto-capteur-temperature-humidite-dht11/ [fr] . A big thanks to him for sharing.
