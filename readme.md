@@ -14,4 +14,4 @@ Here's my solution:
 
 Of course, I can change my mind on my way... 
 
-Note: DHT11 routine is from Skyduino's blog: http://skyduino.wordpress.com/2013/04/27/tuto-capteur-temperature-humidite-dht11/ [fr] . A big thanks to him for sharing.
+Note: DHT11 routine is from Skyduino's blog: http://skyduino.wordpress.com/2013/04/27/tuto-capteur-temperature-humidite-dht11/ [fr] . A big thanks to him for sharing his code under GPLv3 (so are my changes)
